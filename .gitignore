@@ -1,16 +1,20 @@
 .env
 .env.*
 !.env.example
-
 .venv/
 venv/
+env/
+
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 .DS_Store
 Thumbs.db
 
+# Private local browser/session state
 .local/
 playwright-user-data/
 facebook-user-data/
@@ -18,15 +22,13 @@ session/
 sessions/
 cookies/
 screenshots/
-
-logs/
-reports/
-
-data/llm_cache/
-data/supplier_llm_cache/
-data/facebook-chrome-capture-*.json
-
 *.har
 *.trace.zip
-*.log
-*.tmp
+
+# Runtime data, logs, generated reports, and LLM caches stay local.
+data/*.json
+data/reports/
+data/llm_cache/
+data/supplier_llm_cache/
+logs/
+reports/

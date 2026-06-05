@@ -51,6 +51,6 @@ Outputs
 
 ## Cross-Device Model
 
-- Git tracks code, docs, config, tests, and structured JSON state.
-- Git ignores generated runtime outputs, local browser profiles, and LLM caches.
+- Git tracks code, docs, config, tests, and helper scripts.
+- Git ignores local runtime JSON state, generated outputs, browser profiles, and LLM caches by default.
 - Each machine must restore its own environment variables and Facebook login session.

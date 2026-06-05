@@ -1,77 +1,67 @@
-# CODEX_HANDOFF
+# Codex Handoff
 
 ## What This Project Is
 
-This is a private dual-workflow repository for:
+This is a private local agent project for two connected jobs:
 
-1. `Demand Listener`
-   Monitors local compact shed demand and generates decision-oriented reports.
-2. `Supplier RFQ Agent`
-   Tracks suppliers, quote details, follow-up drafts, and sourcing readiness without auto-sending messages.
+- Listen for local demand for compact resin/plastic sheds near Greater Boston.
+- Manage early-stage China supplier RFQ conversations for 4x6 horizontal and 6x5 vertical resin/plastic sheds.
+
+The current active workstream is **Workstream 02: Supplier RFQ / China Sourcing**.
 
 ## Where To Start Reading
 
-1. [README.md](README.md)
-2. [PROJECT_STATUS.md](PROJECT_STATUS.md)
-3. [workstreams/demand-listener-ops-and-reporting.md](workstreams/demand-listener-ops-and-reporting.md)
-4. [agents/demand-listener/AGENT_SPEC.md](agents/demand-listener/AGENT_SPEC.md)
-5. [agents/supplier-rfq/AGENT_SPEC.md](agents/supplier-rfq/AGENT_SPEC.md)
+1. `README.md`
+2. `PROJECT_STATUS.md`
+3. `workstreams/workstream-02-supplier-rfq-china-sourcing.md`
+4. `agents/supplier-rfq-communication-agent/AGENT_SPEC.md`
+5. `shed_agent/cli.py`
+6. `shed_agent/supplier/`
 
-Then inspect:
+For Workstream 01, read:
 
-- `shed_agent/cli.py`
-- `shed_agent/routine.py`
-- `shed_agent/llm_analysis.py`
-- `shed_agent/generate_dashboard.py`
-- `shed_agent/supplier/`
+1. `workstreams/workstream-01-demand-listener.md`
+2. `agents/demand-listener/AGENT_SPEC.md`
+3. `shed_agent/facebook_marketplace.py`
+4. `shed_agent/routine.py`
 
 ## Current Workstream Status
 
-- Active workstream: `Demand Listener Operations and Reporting`
-- Latest routine artifacts were written on `2026-06-04`
-- Current recommendation: `continue watching`
-- Current observation window: `2026-06-02` to `2026-06-08`
-- Supplier workflow is implemented and adjacent, but not the currently hottest operational path
+Workstream 02 has a first working version. It can add suppliers, add product candidates, generate bilingual RFQs, queue drafts, ingest pasted supplier replies, analyze threads, detect missing information, generate follow-up drafts, approve drafts, mark manually sent messages, score candidates, and generate a Chinese Supplier RFQ Pack report.
+
+The workflow has been validated against three realistic supplier scenarios: strong candidate, incomplete information, and high-risk/not suitable supplier.
 
 ## Important Files
 
-- Demand config: `config/shed_agent_config.json`
-- Supplier config: `config/supplier_config.json`
-- Demand state: `data/observations.json`
-- Supplier state:
-  - `data/suppliers.json`
-  - `data/product_candidates.json`
-  - `data/supplier_threads.json`
-  - `data/supplier_message_queue.json`
-- Main entry point: `shed_agent/cli.py`
-- Tests: `tests/`
+- `shed_agent/cli.py`: CLI commands for both workstreams.
+- `shed_agent/supplier/models.py`: supplier, product, thread, message, draft, extraction, follow-up, and score data models.
+- `shed_agent/supplier/rfq.py`: bilingual RFQ template generation.
+- `shed_agent/supplier/llm_extract.py`: LLM extraction with deterministic fallback.
+- `shed_agent/supplier/followup.py`: missing information and follow-up question generation.
+- `shed_agent/supplier/message_queue.py`: human-approved draft queue.
+- `shed_agent/supplier/scoring.py`: deterministic confidence score.
+- `shed_agent/supplier/report.py`: Chinese Supplier RFQ Pack report.
+- `tests/test_supplier_scenarios.py`: end-to-end supplier workflow validation.
 
-## How To Continue From Here
+## How To Continue
 
-1. Create the private GitHub repository.
-2. Run the git initialization and first commit commands listed below.
-3. Clone on Mac.
-4. Create a venv, install dependencies, and restore `OPENAI_API_KEY`.
-5. Run:
+- Keep changes scoped to the active workstream unless the user explicitly asks otherwise.
+- For supplier work, prefer adding focused tests around the full CLI/user flow.
+- If adding real supplier data, treat it as local runtime data and keep it out of Git.
+- Use `generate-supplier-report` to produce the decision view after supplier replies are analyzed.
 
-```bash
-python -m shed_agent.cli decision-check
-python -m shed_agent.cli generate-dashboard
-python -m unittest discover -s tests
-```
+## Do Not Change Without Confirmation
 
-## What Not To Change Without Confirmation
-
-- Supplier outbound safety model: keep it human-approved.
-- Decision thresholds in `config/shed_agent_config.json` unless there is a documented business reason.
-- Core JSON storage schema unless migration steps are added.
-- Facebook collection behavior around login challenges and anti-bypass boundaries.
-- Which generated directories are ignored by Git, unless the repo strategy changes intentionally.
+- Do not modify Demand Listener collector logic unless absolutely necessary.
+- Do not automate supplier browsing.
+- Do not send supplier messages automatically.
+- Do not place orders, implement payment, or add public UI.
+- Do not commit private live data from `data/`, `logs/`, `.local/`, or generated `reports/`.
+- Do not destructively move project files without explaining the migration first.
 
 ## Suggested Next Codex Prompts
 
-- `Audit the Mac setup path for this repo and add any missing bootstrap helpers.`
-- `Review the supplier workflow for schema or state-transition risks before production use.`
-- `Create a minimal cross-platform command runner for the common CLI tasks.`
-- `Add tests around config portability and repo-local profile paths.`
-- `Summarize the latest demand state from data/observations.json and reports/ if present.`
+- "Use the Supplier RFQ Agent to enter my first real supplier. Keep all data local."
+- "Review the first supplier reply and generate a Chinese follow-up draft."
+- "Run the supplier report and tell me which supplier is worth continuing."
+- "After cloning on Mac, verify setup and tests without changing Workstream 01 collector logic."

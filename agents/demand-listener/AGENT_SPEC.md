@@ -1,70 +1,75 @@
-# Demand Listener Agent Spec
+# Agent Spec: Demand Listener Agent
 
-## Agent Objective
+## Objective
 
-Detect whether local compact shed demand is strong enough to justify moving from passive listening into supplier research or inventory planning.
+Collect and analyze local demand evidence for compact resin/plastic sheds so the user can decide whether to source a small inventory batch.
 
 ## User Stories
 
-- As an operator, I want a daily summary of meaningful local shed signals.
-- As an operator, I want noisy marketplace results filtered so they do not distort decisions.
-- As an operator, I want a simple recommendation such as `continue watching` or `start supplier RFQ`.
-- As an operator, I want the workflow to survive across devices using GitHub-backed docs and state files.
+- As the user, I can paste a local listing or post and have it scored.
+- As the user, I can import or collect configured marketplace signals.
+- As the user, I can generate a digest or dashboard to understand market demand.
+- As the user, I can run a decision check before moving into supplier RFQ work.
 
 ## Inputs
 
-- Manual observations and snippets
-- Craigslist RSS URLs
-- Watchlist URLs
-- Optional Facebook Marketplace collection/import
-- `config/shed_agent_config.json`
-- Optional `OPENAI_API_KEY`
+- Manual listing text.
+- Local snippets from community sources.
+- Craigslist RSS URLs.
+- Watchlist URLs.
+- Retail comparable URLs.
+- Local Facebook Marketplace capture JSON.
+- Configuration in `config/shed_agent_config.json`.
 
 ## Outputs
 
-- Daily digest markdown
-- Weekly report markdown
-- Decision check markdown/text
-- HTML dashboard
-- Routine summary JSON/markdown
+- Scored observations.
+- Deduplicated observation store.
+- Daily digest.
+- Weekly market report.
+- Local HTML dashboard.
+- Decision-check recommendation.
 
 ## Internal Workflow
 
-1. Ingest or load observations
-2. Extract structured fields
-3. Score observations
-4. Apply LLM verification or fallback verification
-5. Deduplicate
-6. Run decision logic
-7. Generate reports/dashboard
+1. Collect or enter observations.
+2. Extract listing facts.
+3. Score relevance, buyer intent, delivery gap, and target fit.
+4. Deduplicate repeated signals.
+5. Optionally run LLM-assisted analysis.
+6. Generate reports and decision checks.
 
 ## Data Files Used
 
 - `data/observations.json`
+- `data/facebook-chrome-capture-*.json`
 - `data/llm_cache/`
+- `logs/`
+- `reports/`
 
-## Safety / Approval Boundaries
+These are runtime/private files and should stay out of Git.
 
-- Does not bypass Facebook login or challenge flows
-- Does not contact sellers
-- Does not place orders or make purchases
-- Should not be treated as a permit/zoning authority
+## Safety And Approval Boundaries
+
+- Private local workflow.
+- Browser/session data remains local.
+- No automatic supplier outreach.
+- No order or payment behavior.
 
 ## External Integrations
 
-- Playwright
-- Facebook Marketplace in a local interactive browser
-- OpenAI Responses API
+- Optional Playwright/Chrome for local Facebook Marketplace collection.
+- Optional OpenAI API for listing analysis when `OPENAI_API_KEY` is available.
+- Craigslist RSS and configured URLs when enabled.
 
 ## Error Handling
 
-- Missing API key falls back to deterministic verification
-- Collector launch failure returns diagnostics instead of crashing the whole repo state
-- Blocked fetches are recorded conservatively
+- LLM analysis falls back or records unavailable status when no API key exists.
+- Facebook collection records challenge/login/session issues in summaries.
+- Routine run can skip collectors based on config.
 
 ## Future Improvements
 
-- Mac-native routine helpers
-- Better source coverage beyond Facebook/manual/Craigslist
-- Stronger diffing of day-over-day signal changes
-- Richer dashboard filtering and provenance links
+- More Mac-specific setup documentation for Facebook collection.
+- More robust source health checks.
+- Optional sanitized sample observations for GitHub demos.

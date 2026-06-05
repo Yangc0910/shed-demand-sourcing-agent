@@ -1,65 +1,51 @@
-# PROJECT_STATUS
+# Project Status
 
-## Project
+Last updated: 2026-06-05
 
-- Name: `Shed Local Demand & Sourcing Agent`
-- Project type: private multi-agent operational toolkit
-- Primary domain: local shed demand sensing plus supplier RFQ preparation
-- Current active workstream: `Demand Listener Operations and Reporting`
-- Agent-related: yes
+## Completed
 
-## Completed Work
+- Built the core private CLI workflow for local compact shed demand monitoring.
+- Added manual observation, local snippet, Craigslist RSS, watchlist, retail comparable, Facebook Marketplace capture/import, scoring, deduplication, LLM fallback, digest, dashboard, weekly report, routine run, and decision-check flows.
+- Built Workstream 02 Supplier RFQ & Communication Agent for compact resin/plastic sheds.
+- Added supplier data model, product candidates, supplier threads, message drafts, bilingual RFQ templates, supplier reply extraction, follow-up generation, deterministic scoring, and Supplier RFQ Pack reporting.
+- Ran end-to-end supplier validation scenarios for strong, incomplete, and high-risk suppliers.
+- Converted the supplier report/dashboard output to Chinese.
+- Added GitHub/Codex handoff documentation and agent-specific documentation.
 
-- Built a CLI entry point in `shed_agent/cli.py` covering both demand and supplier workflows.
-- Implemented local demand ingestion, extraction, scoring, deduplication, and decision logic.
-- Added LLM-assisted listing analysis with deterministic fallback in `shed_agent/llm_analysis.py`.
-- Added local Facebook Marketplace collection and conservative import fallback.
-- Implemented daily digest, weekly report, dashboard, and routine summary generation.
-- Implemented supplier storage models, thread analysis, follow-up planning, scoring, and RFQ pack generation.
-- Added unit test coverage across demand, supplier, dashboard, and verification paths.
-- Added GitHub-ready documentation, workstream docs, and handoff docs in this migration pass.
+## In Progress
 
-## In-Progress Work
-
-- Demand Listener remains in active observation mode with routine-generated outputs.
-- Supplier RFQ workflow is implemented but still depends on manual operator input and manual sending.
-- Cross-device GitHub backup structure has now been prepared, but the remote repository still needs to be created by the user.
-
-## Current Implementation Status
-
-- Demand Listener: operational for local routine/reporting.
-- Supplier RFQ Agent: operational for state tracking and draft generation.
-- Git repository: not originally initialized; prepared for local initialization and first commit.
-- Current decision state from latest report: `continue watching`.
-- Current observation window from config: `2026-06-02` through `2026-06-08`.
+- Real supplier onboarding is ready to start manually.
+- GitHub backup is prepared, but the folder is not yet connected to a remote repository.
+- Cross-device continuation is documented; Mac setup still needs to be tested after clone.
 
 ## Known Issues
 
-- `config/shed_agent_config.json` previously used a Windows-specific Facebook profile path; this migration changes it to a repo-local path for cross-device use.
-- Windows helper scripts in `scripts/` do not run on macOS.
-- Facebook CDP/browser launch behavior is platform- and session-dependent.
-- Generated logs/reports can become noisy quickly and are not suitable as Git source-of-truth files.
-- The project relies on manual judgment for Facebook login challenges and supplier outbound approval.
+- The project was not a Git repository before this migration preparation.
+- `data/`, `logs/`, `reports/`, `.local/`, browser profiles, and LLM caches contain local runtime state and should not be committed.
+- Some Workstream 01 helper scripts are Windows PowerShell-specific.
+- `config/shed_agent_config.json` currently includes a Windows-style `%LOCALAPPDATA%` browser profile path for Facebook collection.
+- Facebook Marketplace collection is inherently session/browser dependent and may require manual login or challenge handling on each device.
 
 ## Important Design Decisions
 
-- Keep code in the current top-level package layout; do not move to `src/` during migration because that would add unnecessary risk.
-- Track structured JSON operational state in Git, but ignore generated caches, browser profiles, logs, and reports.
-- Treat README/status/handoff/workstream docs as the durable continuation layer across devices.
-- Keep supplier outreach human-approved; do not automate sending or commitments.
-- Preserve cross-platform Python usage in docs even though some helper scripts remain Windows-only.
+- Keep Workstream 01 Demand Listener collector logic stable unless a fix is absolutely necessary.
+- Keep Supplier RFQ as a private internal workflow with human approval before any outbound message.
+- Do not automatically browse Alibaba, Made-in-China, 1688, or Global Sources.
+- Do not send supplier messages automatically.
+- Do not implement ordering, payment, or public UI.
+- Keep live data local and commit source code, tests, config templates, and documentation to GitHub.
+- Keep `shed_agent/` as the package root for now rather than moving code into `src/`.
 
 ## Next Recommended Tasks
 
-1. Create the GitHub repository and add the remote.
-2. Initialize git locally, commit the GitHub-ready baseline, and push `main`.
-3. Clone on the Mac and verify setup using `python -m shed_agent.cli decision-check`.
-4. Add a small Mac helper script or `Makefile` for common commands if cross-device usage becomes frequent.
-5. Optionally split demand and supplier docs further if the repo grows.
+- Initialize Git locally after reviewing ignored files.
+- Create a private GitHub repository named `shed-local-demand-sourcing-agent` or `supplier-rfq-agent`.
+- Commit code and documentation, then add the GitHub remote and push.
+- On the MacBook Air, clone the repository, create a fresh virtual environment, install dependencies, and run tests.
+- Start the first real supplier workflow by adding one supplier and one product candidate, then queue the RFQ draft for manual review.
 
 ## Risks Or Blockers
 
-- No GitHub remote exists yet, so backup/sync is not complete until the first push happens.
-- Facebook local session state does not transfer across devices and must be re-established per machine.
-- If `.env` or shell profile variables are not recreated on Mac, LLM analysis will fall back to deterministic mode.
-- Operational JSON state is useful to sync, but it may contain sensitive business notes; repo visibility should remain private.
+- Live supplier replies and local marketplace captures can contain private information; keep them out of GitHub unless intentionally sanitized.
+- LLM behavior depends on `OPENAI_API_KEY`; deterministic fallback exists but may be less complete.
+- Mac browser collection may need platform-specific Chrome path handling if Workstream 01 Facebook collection is used there.

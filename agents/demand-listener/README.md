@@ -1,27 +1,25 @@
 # Demand Listener Agent
 
-Local decision-support agent for compact shed demand around Greater Boston.
+Private local demand-monitoring workflow for compact resin/plastic sheds around Greater Boston.
 
-## Role
+## What It Does
 
-- Collect and normalize local demand signals
-- Score and verify candidates
-- Generate digest/report/dashboard outputs
-- Recommend the current market posture
+- Adds manual observations and local snippets.
+- Ingests configured demand sources.
+- Imports local Facebook Marketplace captures.
+- Scores and deduplicates observations.
+- Generates daily digests, weekly reports, dashboards, and decision checks.
 
-## Main Entry Points
+## What To Be Careful With
 
-- `shed_agent/cli.py`
-- `shed_agent/routine.py`
-- `shed_agent/generate_daily_digest.py`
-- `shed_agent/generate_dashboard.py`
-- `shed_agent/decision.py`
+The user has asked not to modify Demand Listener collector logic unless absolutely necessary. Workstream 02 supplier work should not disturb this agent.
 
-## State
+## Common Commands
 
-- `data/observations.json`
-- `config/shed_agent_config.json`
-
-## Current Status
-
-Operational. Latest known recommendation from repository outputs: `continue watching`.
+```bash
+shed-agent add-observation --text "4x6 resin shed, $450, Lexington"
+shed-agent analyze-observations
+shed-agent generate-daily-digest --out reports/daily-digest.md
+shed-agent generate-dashboard --out reports/dashboard.html
+shed-agent decision-check
+```

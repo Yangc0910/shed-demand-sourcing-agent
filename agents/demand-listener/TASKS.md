@@ -1,32 +1,40 @@
-# Demand Listener Tasks
+# Tasks: Demand Listener Agent
 
-## Completed Tasks
+## Completed
 
-- CLI command set implemented
-- Observation storage, extraction, scoring, and deduplication implemented
-- LLM verification and fallback verification implemented
-- Dashboard, daily digest, weekly report, and routine summary generation implemented
-- GitHub-ready docs and handoff structure added
+- Manual observation entry.
+- Local snippet entry.
+- Listing extraction.
+- Scoring.
+- Deduplication.
+- Craigslist/watchlist/retail comparable support.
+- Facebook Marketplace collection/import support.
+- LLM analysis with fallback handling.
+- Daily digest.
+- Weekly report.
+- Dashboard.
+- Routine run.
+- Decision check.
+- Unit and workflow tests.
 
-## Pending Tasks
+## Pending
 
-- Validate full clone/setup flow on Mac
-- Add cross-platform helper command shortcuts
-- Decide long-term policy for versioning large operational JSON state
+- Keep observing local demand until the supplier RFQ decision threshold is clear.
+- Test cloned setup on Mac if this agent will run there.
+- Review local config paths before using Facebook collection on Mac.
 
-## Nice-To-Have Tasks
+## Nice To Have
 
-- Add more explicit report provenance per candidate
-- Add source freshness/change summaries
-- Add richer Mac/Linux scheduler guidance
+- Sanitized sample observation dataset.
+- Mac helper script for routine runs.
+- More concise operator checklist for daily use.
 
 ## Testing Tasks
 
-- Run `python -m unittest discover -s tests` on both Windows and Mac
-- Add a regression test around repo-local Facebook profile path config
+- Run compile and unittest before changing collection/scoring behavior.
+- Add tests for any collector behavior changes.
 
 ## Deployment Tasks
 
-- Initialize git
-- Commit the GitHub-ready baseline
-- Add GitHub remote and push `main`
+- Keep private and local.
+- Keep runtime data out of GitHub.

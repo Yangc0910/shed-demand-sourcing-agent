@@ -1,184 +1,86 @@
 # Shed Local Demand & Sourcing Agent
 
-Private multi-agent toolkit for evaluating local shed demand in Greater Boston and preparing a human-approved supplier RFQ workflow for compact resin/plastic sheds.
+Private local workflow for validating compact resin/plastic shed demand around Greater Boston and managing early China supplier RFQ conversations. The project is CLI-first, file-backed, and intentionally private: it does not automatically contact suppliers, place orders, process payments, or publish a public UI.
 
-## Project Purpose
+## Current Workstreams
 
-This repository is the working source of truth for two connected agent workflows:
+- **Workstream 01 - Demand Listener**: monitors and analyzes local compact shed demand signals from manual entries, configured URLs, Craigslist RSS, retail comparables, and optional Facebook Marketplace collection.
+- **Workstream 02 - Supplier RFQ / China Sourcing**: manages supplier records, product candidates, bilingual RFQ drafts, supplier replies, missing-information follow-ups, confidence scoring, and a Chinese Supplier RFQ Pack report.
 
-1. `Demand Listener`
-   Tracks local demand signals, scores listings, generates digest/report/dashboard outputs, and recommends whether to keep watching, begin supplier research, or stop.
-2. `Supplier RFQ Agent`
-   Tracks suppliers, product candidates, inbound/outbound thread state, structured quote extraction, and human-approved follow-up drafts.
+## Architecture
 
-The current active operational workstream is documented in [workstreams/demand-listener-ops-and-reporting.md](workstreams/demand-listener-ops-and-reporting.md).
+- `shed_agent/`: Python package and CLI entry point.
+- `shed_agent/supplier/`: supplier RFQ and communication workflow modules.
+- `config/`: portable JSON configuration templates for demand and supplier workflows.
+- `tests/`: unit and end-to-end workflow tests.
+- `scripts/`: Windows helper scripts for routine local runs.
+- `workstreams/`: workstream-level project memory for GitHub/Codex handoff.
+- `agents/`: agent-specific instructions, specs, and task lists.
+- `data/`, `logs/`, `reports/`, `.local/`: local runtime state. These are ignored by Git by default because they can contain private marketplace data, supplier conversations, browser sessions, generated reports, and caches.
 
-## High-Level Architecture
-
-```text
-CLI
-  -> shed_agent.cli
-     -> demand listener modules
-        -> ingest / extract / deduplicate / score / llm_analysis / decision
-        -> reports: daily digest / weekly report / dashboard / routine summary
-     -> supplier modules
-        -> suppliers / products / threads / message queue / scoring / report
-JSON storage
-  -> data/observations.json
-  -> data/suppliers.json
-  -> data/product_candidates.json
-  -> data/supplier_threads.json
-  -> data/supplier_message_queue.json
-Config
-  -> config/shed_agent_config.json
-  -> config/supplier_config.json
-```
-
-## Main Features
-
-- Local demand observation storage and scoring for `4x6_horizontal` and `6x5_vertical`
-- Craigslist/watchlist/manual snippet ingestion
-- Local Facebook Marketplace collection with manual-login-safe behavior
-- LLM-assisted listing interpretation with deterministic fallback
-- Daily digest, weekly report, decision check, and HTML dashboard generation
-- Supplier + product + thread state tracking
-- RFQ template generation and human-approved follow-up queue
-- Local scheduled routine support on Windows
-
-## Repository Layout
-
-```text
-project-root/
-  README.md
-  PROJECT_STATUS.md
-  CODEX_HANDOFF.md
-  .gitignore
-  .env.example
-  docs/
-    architecture.md
-    mac-setup.md
-  workstreams/
-    demand-listener-ops-and-reporting.md
-  agents/
-    demand-listener/
-      README.md
-      AGENT_SPEC.md
-      TASKS.md
-    supplier-rfq/
-      README.md
-      AGENT_SPEC.md
-      TASKS.md
-  config/
-  data/
-  examples/
-  scripts/
-  shed_agent/
-  tests/
-```
-
-No code directories were moved in this migration pass. That keeps the current implementation stable while adding GitHub-ready structure around it.
+There is no destructive file move planned. The package currently lives in `shed_agent/` rather than `src/`; keeping it in place avoids unnecessary churn.
 
 ## Setup
-
-### Requirements
-
-- Python `3.10+`
-- Git
-- Optional: Playwright browser runtime for Facebook collection
-- Optional: `OPENAI_API_KEY` for LLM-based analysis and drafting
-
-### Create a Virtual Environment
 
 Windows PowerShell:
 
 ```powershell
 py -m venv .venv
-.venv\Scripts\Activate.ps1
-python -m pip install -U pip
-python -m pip install -e .
-python -m playwright install chromium
+.\.venv\Scripts\Activate.ps1
+py -m pip install -e .
+py -m playwright install chromium
 ```
 
-macOS / zsh:
+Mac or Linux:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -U pip
 python -m pip install -e .
 python -m playwright install chromium
 ```
 
-### Environment Variables
+`OPENAI_API_KEY` is optional. If it is not set, the LLM-assisted analysis and supplier reply extraction use deterministic fallback behavior where available.
 
-Copy `.env.example` to `.env` if you want a local env file.
+## Common Commands
 
-```text
-OPENAI_API_KEY=
-```
-
-## How To Run Locally
-
-Cross-platform CLI examples:
+Demand Listener:
 
 ```bash
-python -m shed_agent.cli --help
-python -m shed_agent.cli decision-check
-python -m shed_agent.cli generate-daily-digest
-python -m shed_agent.cli generate-dashboard
-python -m shed_agent.cli generate-supplier-report
+shed-agent add-observation --text "Suncast 4x6 resin shed, $450, Lexington"
+shed-agent analyze-observations
+shed-agent generate-daily-digest --out reports/daily-digest.md
+shed-agent generate-dashboard --out reports/dashboard.html
+shed-agent decision-check
 ```
 
-Windows-specific scheduled routine:
+Supplier RFQ workflow:
 
-```powershell
-powershell.exe -ExecutionPolicy Bypass -File ".\scripts\run_routine.ps1"
+```bash
+shed-agent add-supplier --name "Example Plastics" --platform "Alibaba" --url "https://example.com"
+shed-agent add-product-candidate --supplier-id SUPPLIER_ID --name "4x6 horizontal resin shed" --product-type 4x6_horizontal
+shed-agent generate-rfq-template --product-type 4x6_horizontal --queue-for-supplier SUPPLIER_ID
+shed-agent add-supplier-message --supplier-id SUPPLIER_ID --text-file supplier-reply.txt
+shed-agent analyze-supplier-thread --thread-id THREAD_ID
+shed-agent generate-follow-up-draft --thread-id THREAD_ID
+shed-agent list-message-queue
+shed-agent approve-message-draft --draft-id DRAFT_ID
+shed-agent mark-message-sent-manually --draft-id DRAFT_ID --language chinese
+shed-agent generate-supplier-report --out reports/supplier-rfq-pack.md
 ```
 
-## Key Data And Outputs
-
-Tracked operational state:
-
-- `data/observations.json`
-- `data/suppliers.json`
-- `data/product_candidates.json`
-- `data/supplier_threads.json`
-- `data/supplier_message_queue.json`
-
-Generated artifacts that are intentionally ignored by Git:
-
-- `logs/`
-- `reports/`
-- `.local/`
-- `data/llm_cache/`
-- `data/supplier_llm_cache/`
-
-## Dependencies
-
-Declared in [pyproject.toml](pyproject.toml):
-
-- `playwright>=1.44.0`
-
-The code also uses standard-library HTTP/JSON tooling and optional OpenAI API access via direct HTTP requests.
+No supplier message is sent automatically. Draft approval and manual sending are explicit separate steps.
 
 ## Current Status
 
-See:
+Workstream 01 is functional as a private demand-listening workflow. Workstream 02 has a first automation-ready Supplier RFQ & Communication Agent with tested scenario coverage and a Chinese report/dashboard. See:
 
-- [PROJECT_STATUS.md](PROJECT_STATUS.md)
-- [CODEX_HANDOFF.md](CODEX_HANDOFF.md)
-- [workstreams/demand-listener-ops-and-reporting.md](workstreams/demand-listener-ops-and-reporting.md)
+- [Project Status](PROJECT_STATUS.md)
+- [Codex Handoff](CODEX_HANDOFF.md)
+- [Workstream 02](workstreams/workstream-02-supplier-rfq-china-sourcing.md)
+- [Supplier Agent](agents/supplier-rfq-communication-agent/README.md)
+- [Demand Listener Agent](agents/demand-listener/README.md)
 
-As of `2026-06-04`, the demand routine is producing daily digest, decision check, routine summary, and dashboard outputs successfully. The current recommendation remains `continue watching`.
+## Cross-Device Notes
 
-## Testing
-
-```bash
-python -m unittest discover -s tests
-```
-
-## Important Notes
-
-- Facebook collection is best-effort and depends on a valid local logged-in session.
-- Supplier messaging remains human-approved; the project does not auto-send supplier outreach.
-- The repository is intended to sync code, docs, and agent state across Windows and Mac, but Windows helper scripts remain Windows-only by design.
+GitHub should be the source of truth for code and documentation. Runtime data should remain local on each device. After cloning on a Mac, recreate `.venv`, install dependencies, and configure any local paths in `config/shed_agent_config.json` before running browser-based collection.

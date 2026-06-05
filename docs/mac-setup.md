@@ -8,7 +8,7 @@ Bring the repository up on macOS after cloning from GitHub without depending on 
 
 ```bash
 git clone <repo-url>
-cd shed-local-demand-agent
+cd shed-local-demand-sourcing-agent
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -U pip
@@ -17,6 +17,7 @@ python -m playwright install chromium
 export OPENAI_API_KEY=...
 python -m shed_agent.cli decision-check
 python -m unittest discover -s tests
+bash ./scripts/run_routine.sh
 ```
 
 ## Platform Notes

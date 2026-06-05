@@ -27,5 +27,5 @@
 
 ## Deployment Tasks
 
-- Include supplier state JSONs in the first Git commit
+- Keep supplier runtime JSON local by default unless a deliberate sync/export policy is chosen later
 - Keep repo private because supplier notes may be sensitive
