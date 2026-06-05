@@ -25,7 +25,7 @@ bash ./scripts/run_routine.sh
 - Use `python3` to create the venv.
 - Do not use the Windows PowerShell scripts from `scripts/`.
 - Facebook login state does not sync from Windows; log in again locally if you plan to use Facebook collection.
-- The checked-in config now uses a repo-local `.local/playwright/facebook-profile` path so the browser profile can be recreated safely on Mac.
+- `config/shed_agent_config.json` may use a Windows `%LOCALAPPDATA%` browser-profile path. For Mac Facebook collection, change it locally to `.local/playwright/facebook-profile` or another Mac-local path.
 
 ## Recommended First Validation
 

@@ -26,6 +26,8 @@ screenshots/
 *.trace.zip
 
 # Runtime logs, generated reports, raw captures, and LLM caches stay local.
+data/*.json
+!data/.gitkeep
 data/reports/
 data/facebook-chrome-capture-*.json
 data/llm_cache/

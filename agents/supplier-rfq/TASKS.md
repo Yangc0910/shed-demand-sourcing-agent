@@ -1,31 +1,46 @@
-# Supplier RFQ Tasks
+# Tasks: Supplier RFQ & Communication Agent
 
-## Completed Tasks
+## Completed
 
-- Supplier, product, thread, and draft storage implemented
-- RFQ template generation implemented
-- Thread analysis and follow-up draft queue implemented
-- Supplier RFQ report generation implemented
-- Documentation and handoff structure added
+- Supplier data model.
+- Product candidate data model.
+- Supplier thread and message model.
+- Human-approved message draft queue.
+- Chinese and English RFQ template generator.
+- Pasted supplier reply ingestion.
+- LLM extraction with deterministic fallback.
+- Missing-information detection.
+- Follow-up question and draft generation.
+- Deterministic confidence score.
+- Risk checklist.
+- Chinese Supplier RFQ Pack report.
+- End-to-end scenario validation for strong, incomplete, and high-risk suppliers.
+- Unit tests and scenario tests.
+- GitHub/Codex handoff documentation.
 
-## Pending Tasks
+## Pending
 
-- Validate supplier workflow from a fresh clone
-- Add more explicit schema migration guidance if data models change
-- Review whether supplier data should stay in the same repository as demand state
+- Enter first real supplier manually.
+- Run the full supplier workflow with real pasted replies.
+- Review whether any real supplier fields need model additions.
+- Verify Mac clone/setup/test path.
 
-## Nice-To-Have Tasks
+## Nice To Have
 
-- Add CSV export for supplier comparisons
-- Add better landed-cost placeholders and comparison tables
-- Add clearer audit history for manual send steps
+- Friendlier CLI helpers for selecting recent supplier/thread/draft IDs.
+- Sanitized example dataset for demonstrations.
+- Optional spreadsheet export for supplier comparison.
+- Optional report copy into `docs/` when sanitized.
 
 ## Testing Tasks
 
-- Run supplier-related unit tests after clone on Mac
-- Add tests for cross-platform path assumptions in supplier outputs
+- Keep running `py -m compileall shed_agent tests`.
+- Keep running `py -m unittest discover -s tests`.
+- Add tests whenever missing-info detection or scoring rules change.
 
 ## Deployment Tasks
 
-- Keep supplier runtime JSON local by default unless a deliberate sync/export policy is chosen later
-- Keep repo private because supplier notes may be sensitive
+- Keep as local CLI only.
+- Use GitHub for code/documentation backup.
+- Do not commit private runtime supplier JSON unless intentionally sanitized.
+- Do not deploy a public UI.

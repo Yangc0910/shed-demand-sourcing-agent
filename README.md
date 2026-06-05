@@ -20,7 +20,7 @@ The project currently contains two related agent lanes:
 2. `Supplier RFQ Agent`
    Tracks suppliers, product candidates, reply analysis, and human-approved draft messaging.
 
-The currently active workstream is [workstreams/demand-listener-ops-and-reporting.md](workstreams/demand-listener-ops-and-reporting.md).
+The currently active workstream is [workstreams/workstream-02-supplier-rfq-china-sourcing.md](workstreams/workstream-02-supplier-rfq-china-sourcing.md).
 
 ## High-Level Architecture
 
@@ -33,7 +33,7 @@ CLI
      -> supplier modules
         -> suppliers / products / threads / queue / scoring / report
 
-Tracked state
+Local runtime state, ignored by Git by default
   -> data/observations.json
   -> data/suppliers.json
   -> data/product_candidates.json
@@ -77,6 +77,8 @@ project-root/
     cross-device-sync.md
     mac-setup.md
   workstreams/
+    workstream-01-demand-listener.md
+    workstream-02-supplier-rfq-china-sourcing.md
     demand-listener-ops-and-reporting.md
   agents/
     demand-listener/
@@ -165,10 +167,10 @@ LLM-assisted analysis additionally requires `OPENAI_API_KEY`.
 
 ## Current Status
 
-- Demand Listener is the currently active operational lane.
-- Latest demand artifacts indicate `continue watching`.
-- Current configured observation window is `2026-06-02` through `2026-06-08`.
-- Supplier RFQ code is implemented and test-covered, but the checked-in supplier JSON state is currently empty.
+- Workstream 02 Supplier RFQ / China Sourcing is the current active workstream for this GitHub handoff.
+- Supplier RFQ code is implemented, scenario-tested, and generates a Chinese Supplier RFQ Pack report/dashboard.
+- Demand Listener remains functional as Workstream 01 and should not be changed unless specifically requested.
+- Runtime supplier JSON, observations, logs, reports, browser sessions, and caches are local/private and ignored by Git.
 - The current automated test baseline passes.
 
 See:
