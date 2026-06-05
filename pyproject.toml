@@ -1,0 +1,11 @@
+[project]
+name = "shed-local-demand-agent"
+version = "0.1.0"
+description = "Private local demand listener for compact outdoor shed market observations."
+requires-python = ">=3.10"
+dependencies = [
+  "playwright>=1.44.0",
+]
+
+[project.scripts]
+shed-agent = "shed_agent.cli:main"

@@ -1,0 +1,20 @@
+{
+  "targetProductTypes": [
+    "4x6_horizontal",
+    "6x5_vertical"
+  ],
+  "preferredBatchMin": 6,
+  "preferredBatchMax": 8,
+  "maximumInitialBatch": 10,
+  "destination": "Boston / East Coast US",
+  "rfqPriceTiers": [
+    5,
+    10,
+    20,
+    50
+  ],
+  "enableLLMExtraction": false,
+  "enableLLMDrafting": false,
+  "cacheLLMResults": false,
+  "outboundMode": "human_approved"
+}

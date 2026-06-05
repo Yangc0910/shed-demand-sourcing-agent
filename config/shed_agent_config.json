@@ -1,0 +1,105 @@
+{
+  "targetLocations": [
+    "Lexington",
+    "Burlington",
+    "Waltham",
+    "Arlington",
+    "Bedford",
+    "Belmont",
+    "Winchester"
+  ],
+  "targetRadiusMiles": 18,
+  "targetSkus": [
+    "4x6_horizontal",
+    "6x5_vertical"
+  ],
+  "maxInitialInventory": 10,
+  "preferredInitialInventory": "6-8",
+  "craigslistRssUrls": [],
+  "watchlistUrls": [],
+  "retailComparableUrls": [],
+  "enableFacebookMarketplaceCollector": true,
+  "facebookUserDataDir": ".local/playwright/facebook-profile",
+  "facebookSearchKeywords": [
+    "resin shed",
+    "plastic shed",
+    "Suncast shed",
+    "Keter shed",
+    "Lifetime shed",
+    "Rubbermaid shed",
+    "outdoor storage shed",
+    "horizontal shed",
+    "vertical shed",
+    "small shed",
+    "deck box",
+    "patio storage",
+    "bike storage shed",
+    "garden storage shed"
+  ],
+  "maxListingsPerKeyword": 20,
+  "maxScrollsPerKeyword": 3,
+  "openDetailPages": true,
+  "maxDetailPagesPerRun": 50,
+  "delayBetweenActionsMs": [
+    1500,
+    3000
+  ],
+  "headless": false,
+  "facebookLaunchMode": "cdp",
+  "facebookCdpUrl": "http://127.0.0.1:9222",
+  "facebookCdpPort": 9222,
+  "facebookStartChromeForCdp": true,
+  "facebookChromeExecutablePath": "",
+  "facebookRunMode": "manual_start",
+  "facebookMarketplaceLocationSlug": "boston",
+  "facebookManualChallengeTimeoutSeconds": 300,
+  "enableLLMAnalysis": true,
+  "llmProvider": "openai",
+  "llmModel": "gpt-4.1-mini",
+  "maxLLMListingsPerRun": 100,
+  "maxDescriptionCharsForLLM": 4000,
+  "cacheLLMResults": true,
+  "reanalyzeChangedListingsOnly": true,
+  "enableImageAnalysis": false,
+  "llmCacheDir": "data/llm_cache",
+  "routine": {
+    "enabled": true,
+    "runFacebookCollector": false,
+    "runCraigslistCollector": false,
+    "runRetailComparableCollector": false,
+    "runLLMAnalysis": true,
+    "generateDailyDigest": true,
+    "generateWeeklyReportOn": "Sunday",
+    "runDecisionCheck": true,
+    "maxRuntimeMinutes": 30,
+    "stopOnFacebookChallenge": true
+  },
+  "logging": {
+    "logDir": "logs",
+    "reportDir": "reports",
+    "saveRunSummaryJson": true,
+    "saveRunSummaryMarkdown": true
+  },
+  "scoreThresholds": {
+    "supplierRfqComparableCount30d": 10,
+    "supplierRfqTargetFitCount30d": 5,
+    "supplierRfqAverageOverallSignal": 7,
+    "supplierRfqDeliveryGap": 6,
+    "inventoryCandidateAverageOverallSignal": 7.5,
+    "inventoryCandidateDeliveryGap": 7,
+    "continueWatchingMinimumObservations": 10
+  },
+  "provisionalTargetPrices": {
+    "4x6_horizontal": 480,
+    "6x5_vertical": 630
+  },
+  "expectedLandedCostPlaceholders": {
+    "4x6_horizontal": 260,
+    "6x5_vertical": 360
+  },
+  "reportOutputDirectory": "data/reports"
+  ,
+  "observationWindowStartDate": "2026-06-02",
+  "observationWindowDays": 7,
+  "dashboardOutputFile": "reports/dashboard.html"
+}

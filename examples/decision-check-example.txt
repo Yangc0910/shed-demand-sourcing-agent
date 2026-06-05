@@ -1,0 +1,5 @@
+Decision: continue watching
+- 7 observations in the last 30 days.
+- 5 useful comparables and 4 target-SKU-fit observations.
+- Average overall signal score is below the configured supplier RFQ threshold.
+- Observation volume is still below the configured confidence floor.

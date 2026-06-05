@@ -1,0 +1,34 @@
+{
+  "targetProductTypes": [
+    "4x6_horizontal",
+    "6x5_vertical"
+  ],
+  "preferredBatchMin": 6,
+  "preferredBatchMax": 8,
+  "maximumInitialBatch": 10,
+  "destination": "Boston / East Coast US",
+  "rfqPriceTiers": [
+    5,
+    10,
+    20,
+    50
+  ],
+  "enableLLMExtraction": true,
+  "enableLLMDrafting": true,
+  "llmModel": "gpt-4.1-mini",
+  "cacheLLMResults": true,
+  "llmCacheDir": "data/supplier_llm_cache",
+  "reportOutputDirectory": "reports",
+  "outboundMode": "human_approved",
+  "scoreThresholds": {
+    "strongCandidate": 8.0,
+    "watch": 6.0,
+    "needsMoreInfo": 4.0
+  },
+  "targetUnitCosts": {
+    "4x6_horizontal": 260,
+    "6x5_vertical": 360
+  },
+  "manageableGrossWeightKg": 120,
+  "manageableCartonsPerUnit": 3
+}

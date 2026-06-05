@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+  <channel>
+    <title>Mock Craigslist Shed Search</title>
+    <item>
+      <title>Suncast 4x6 horizontal shed - $399</title>
+      <link>https://boston.craigslist.org/mock/1001.html</link>
+      <description>Lexington MA. Resin shed. Pickup only, bring truck.</description>
+    </item>
+    <item>
+      <title>Keter 6 x 5 vertical shed - $610</title>
+      <link>https://boston.craigslist.org/mock/1002.html</link>
+      <description>Waltham MA. Like new. Can deliver locally.</description>
+    </item>
+  </channel>
+</rss>
