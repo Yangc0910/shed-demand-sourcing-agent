@@ -19,15 +19,24 @@ Use GitHub as the durable source of truth for:
 - README / handoff / workstream / agent docs
 - helper scripts
 
+## What Git Tracks
+
+- source code
+- tests
+- config files
+- top-level handoff/status docs
+- workstream docs
+- agent docs
+- core operational JSON state in `data/observations.json`, `data/suppliers.json`, `data/product_candidates.json`, `data/supplier_threads.json`, and `data/supplier_message_queue.json`
+
 ## What Git Does Not Track
 
 - browser profiles
 - Playwright caches
 - logs
 - generated reports
-- runtime observation state
+- raw Facebook capture dumps
 - local LLM caches
-- local supplier runtime state
 
 These are intentionally gitignored so the repo stays portable and credential-safe.
 

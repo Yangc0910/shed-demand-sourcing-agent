@@ -2,50 +2,71 @@
 
 Last updated: 2026-06-05
 
-## Completed
+## Project
 
-- Built the core private CLI workflow for local compact shed demand monitoring.
-- Added manual observation, local snippet, Craigslist RSS, watchlist, retail comparable, Facebook Marketplace capture/import, scoring, deduplication, LLM fallback, digest, dashboard, weekly report, routine run, and decision-check flows.
-- Built Workstream 02 Supplier RFQ & Communication Agent for compact resin/plastic sheds.
-- Added supplier data model, product candidates, supplier threads, message drafts, bilingual RFQ templates, supplier reply extraction, follow-up generation, deterministic scoring, and Supplier RFQ Pack reporting.
-- Ran end-to-end supplier validation scenarios for strong, incomplete, and high-risk suppliers.
-- Converted the supplier report/dashboard output to Chinese.
-- Added GitHub/Codex handoff documentation and agent-specific documentation.
+- Name: `Shed Local Demand & Sourcing Agent`
+- Recommended GitHub repo name: `shed-demand-sourcing-agent`
+- Agent-related: Yes
+- Current active workstream: `Demand Listener Operations and Reporting`
 
-## In Progress
+## Completed Work
 
-- Real supplier onboarding is ready to start manually.
-- GitHub backup is prepared, but the folder is not yet connected to a remote repository.
-- Cross-device continuation is documented; Mac setup still needs to be tested after clone.
+- Implemented a unified CLI in `shed_agent/cli.py` for both demand and supplier workflows.
+- Implemented local demand observation ingestion, extraction, scoring, deduplication, and decision logic.
+- Implemented daily digest, weekly report, dashboard, and routine summary outputs.
+- Implemented conservative Facebook Marketplace collection/import support.
+- Implemented supplier storage, RFQ template generation, thread analysis, follow-up drafting, and supplier RFQ reporting.
+- Added GitHub-ready documentation, handoff docs, workstream docs, and agent-specific documentation.
+- Added a Mac/Linux routine wrapper at `scripts/run_routine.sh`.
+- Verified the current baseline with `73` passing tests.
+
+## In-Progress Work
+
+- Demand Listener remains in active listening mode rather than sourcing escalation mode.
+- Supplier RFQ workflow is implemented but still relies on manual operator input and manual sending.
+- GitHub sync is prepared locally, but there is still no remote configured.
+
+## Current Implementation Status
+
+### Demand Listener
+
+- Operational and generating current reports.
+- Latest decision state remains `continue watching`.
+- Current observation window is `2026-06-02` through `2026-06-08`.
+- `data/observations.json` currently contains `69` observations.
+
+### Supplier RFQ Agent
+
+- Operational in code and covered by tests.
+- Current checked-in supplier JSON files are empty and ready for real data entry.
+- Existing supplier pack artifacts in `reports/` should be treated as generated examples, not canonical state.
 
 ## Known Issues
 
-- The project was not a Git repository before this migration preparation.
-- `data/`, `logs/`, `reports/`, `.local/`, browser profiles, and LLM caches contain local runtime state and should not be committed.
-- Some Workstream 01 helper scripts are Windows PowerShell-specific.
-- `config/shed_agent_config.json` currently includes a Windows-style `%LOCALAPPDATA%` browser profile path for Facebook collection.
-- Facebook Marketplace collection is inherently session/browser dependent and may require manual login or challenge handling on each device.
+- Facebook collection remains session- and platform-dependent.
+- Windows PowerShell helper scripts do not run on Mac.
+- Generated logs and reports can become noisy and are not good git source-of-truth files.
+- Mac scheduling is not automated yet.
 
 ## Important Design Decisions
 
-- Keep Workstream 01 Demand Listener collector logic stable unless a fix is absolutely necessary.
-- Keep Supplier RFQ as a private internal workflow with human approval before any outbound message.
-- Do not automatically browse Alibaba, Made-in-China, 1688, or Global Sources.
-- Do not send supplier messages automatically.
-- Do not implement ordering, payment, or public UI.
-- Keep live data local and commit source code, tests, config templates, and documentation to GitHub.
-- Keep `shed_agent/` as the package root for now rather than moving code into `src/`.
+- Keep code in the existing `shed_agent/` layout rather than moving to `src/`.
+- Treat top-level docs plus `workstreams/` and `agents/` as the durable continuation layer across devices.
+- Keep supplier outreach human-approved only.
+- Use a repo-local ignored browser profile path for Facebook collection: `.local/playwright/facebook-profile`.
+- Keep browser state, logs, reports, and caches out of git.
 
 ## Next Recommended Tasks
 
-- Initialize Git locally after reviewing ignored files.
-- Create a private GitHub repository named `shed-local-demand-sourcing-agent` or `supplier-rfq-agent`.
-- Commit code and documentation, then add the GitHub remote and push.
-- On the MacBook Air, clone the repository, create a fresh virtual environment, install dependencies, and run tests.
-- Start the first real supplier workflow by adding one supplier and one product candidate, then queue the RFQ draft for manual review.
+1. Create the private GitHub repository.
+2. Add the remote and push `main`.
+3. Clone on the Mac and verify setup with tests.
+4. Decide whether `data/observations.json` should remain a living tracked state file or be periodically snapshotted.
+5. If supplier work becomes active, start populating the supplier JSON files with real records.
 
 ## Risks Or Blockers
 
-- Live supplier replies and local marketplace captures can contain private information; keep them out of GitHub unless intentionally sanitized.
-- LLM behavior depends on `OPENAI_API_KEY`; deterministic fallback exists but may be less complete.
-- Mac browser collection may need platform-specific Chrome path handling if Workstream 01 Facebook collection is used there.
+- Backup/sync is incomplete until the first GitHub push happens.
+- Local browser session state does not transfer across devices.
+- If `OPENAI_API_KEY` is not restored on Mac, LLM-assisted flows fall back or degrade.
+- Repo visibility should stay private because tracked state may still contain sensitive business context.

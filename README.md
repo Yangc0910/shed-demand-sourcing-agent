@@ -1,28 +1,112 @@
 # Shed Local Demand & Sourcing Agent
 
-Private local workflow for validating compact resin/plastic shed demand around Greater Boston and managing early China supplier RFQ conversations. The project is CLI-first, file-backed, and intentionally private: it does not automatically contact suppliers, place orders, process payments, or publish a public UI.
+Private multi-agent toolkit for evaluating local compact-shed demand in Greater Boston and preparing a cautious supplier RFQ workflow for small-batch sourcing.
 
-## Current Workstreams
+## Project Purpose
 
-- **Workstream 01 - Demand Listener**: monitors and analyzes local compact shed demand signals from manual entries, configured URLs, Craigslist RSS, retail comparables, and optional Facebook Marketplace collection.
-- **Workstream 02 - Supplier RFQ / China Sourcing**: manages supplier records, product candidates, bilingual RFQ drafts, supplier replies, missing-information follow-ups, confidence scoring, and a Chinese Supplier RFQ Pack report.
+This repository is the GitHub-ready source of truth for:
 
-## Architecture
+- code
+- project status
+- active workstream status
+- next actions
+- agent instructions
+- portable setup notes for Windows and Mac
 
-- `shed_agent/`: Python package and CLI entry point.
-- `shed_agent/supplier/`: supplier RFQ and communication workflow modules.
-- `config/`: portable JSON configuration templates for demand and supplier workflows.
-- `tests/`: unit and end-to-end workflow tests.
-- `scripts/`: Windows helper scripts for routine local runs.
-- `workstreams/`: workstream-level project memory for GitHub/Codex handoff.
-- `agents/`: agent-specific instructions, specs, and task lists.
-- `data/`, `logs/`, `reports/`, `.local/`: local runtime state. These are ignored by Git by default because they can contain private marketplace data, supplier conversations, browser sessions, generated reports, and caches.
+The project currently contains two related agent lanes:
 
-There is no destructive file move planned. The package currently lives in `shed_agent/` rather than `src/`; keeping it in place avoids unnecessary churn.
+1. `Demand Listener`
+   Monitors local market signals, scores demand quality, and generates decision-oriented artifacts.
+2. `Supplier RFQ Agent`
+   Tracks suppliers, product candidates, reply analysis, and human-approved draft messaging.
+
+The currently active workstream is [workstreams/demand-listener-ops-and-reporting.md](workstreams/demand-listener-ops-and-reporting.md).
+
+## High-Level Architecture
+
+```text
+CLI
+  -> shed_agent.cli
+     -> demand listener modules
+        -> ingest / extract / deduplicate / score / llm_analysis / decision
+        -> outputs: daily digest / weekly report / dashboard / routine summary
+     -> supplier modules
+        -> suppliers / products / threads / queue / scoring / report
+
+Tracked state
+  -> data/observations.json
+  -> data/suppliers.json
+  -> data/product_candidates.json
+  -> data/supplier_threads.json
+  -> data/supplier_message_queue.json
+
+Config
+  -> config/shed_agent_config.json
+  -> config/supplier_config.json
+
+Documentation
+  -> PROJECT_STATUS.md
+  -> CODEX_HANDOFF.md
+  -> workstreams/
+  -> agents/
+  -> docs/
+```
+
+## Main Features
+
+- local demand observation storage and scoring
+- Craigslist RSS, watchlist, local snippet, and conservative Facebook capture flows
+- LLM-assisted interpretation with fallback behavior
+- daily digest, weekly report, dashboard, and decision-check generation
+- supplier, product, thread, and message-queue tracking
+- bilingual RFQ generation and follow-up planning
+- local routine wrappers for Windows and Mac/Linux
+
+## Repository Layout
+
+```text
+project-root/
+  README.md
+  PROJECT_STATUS.md
+  CODEX_HANDOFF.md
+  .gitignore
+  .gitattributes
+  .env.example
+  docs/
+    architecture.md
+    cross-device-sync.md
+    mac-setup.md
+  workstreams/
+    demand-listener-ops-and-reporting.md
+  agents/
+    demand-listener/
+      README.md
+      AGENT_SPEC.md
+      TASKS.md
+    supplier-rfq/
+      README.md
+      AGENT_SPEC.md
+      TASKS.md
+  config/
+  data/
+  examples/
+  scripts/
+  shed_agent/
+  tests/
+```
+
+No source files were moved during this migration pass. The package stays in `shed_agent/` to avoid unnecessary churn before backup and cross-device sync.
 
 ## Setup
 
-Windows PowerShell:
+### Requirements
+
+- Python `3.10+`
+- Git
+- optional Playwright Chromium runtime
+- optional `OPENAI_API_KEY`
+
+### Windows
 
 ```powershell
 py -m venv .venv
@@ -31,7 +115,7 @@ py -m pip install -e .
 py -m playwright install chromium
 ```
 
-Mac or Linux:
+### Mac / Linux
 
 ```bash
 python3 -m venv .venv
@@ -40,47 +124,62 @@ python -m pip install -e .
 python -m playwright install chromium
 ```
 
-`OPENAI_API_KEY` is optional. If it is not set, the LLM-assisted analysis and supplier reply extraction use deterministic fallback behavior where available.
+Optional local env file:
 
-## Common Commands
-
-Demand Listener:
-
-```bash
-shed-agent add-observation --text "Suncast 4x6 resin shed, $450, Lexington"
-shed-agent analyze-observations
-shed-agent generate-daily-digest --out reports/daily-digest.md
-shed-agent generate-dashboard --out reports/dashboard.html
-shed-agent decision-check
+```text
+OPENAI_API_KEY=
 ```
 
-Supplier RFQ workflow:
+## How To Run Locally
+
+Cross-platform CLI:
 
 ```bash
-shed-agent add-supplier --name "Example Plastics" --platform "Alibaba" --url "https://example.com"
-shed-agent add-product-candidate --supplier-id SUPPLIER_ID --name "4x6 horizontal resin shed" --product-type 4x6_horizontal
-shed-agent generate-rfq-template --product-type 4x6_horizontal --queue-for-supplier SUPPLIER_ID
-shed-agent add-supplier-message --supplier-id SUPPLIER_ID --text-file supplier-reply.txt
-shed-agent analyze-supplier-thread --thread-id THREAD_ID
-shed-agent generate-follow-up-draft --thread-id THREAD_ID
-shed-agent list-message-queue
-shed-agent approve-message-draft --draft-id DRAFT_ID
-shed-agent mark-message-sent-manually --draft-id DRAFT_ID --language chinese
-shed-agent generate-supplier-report --out reports/supplier-rfq-pack.md
+python -m shed_agent.cli --help
+python -m shed_agent.cli decision-check
+python -m shed_agent.cli generate-daily-digest
+python -m shed_agent.cli generate-dashboard
+python -m shed_agent.cli generate-supplier-report
+python -m unittest discover -s tests
 ```
 
-No supplier message is sent automatically. Draft approval and manual sending are explicit separate steps.
+Windows routine wrapper:
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File ".\scripts\run_routine.ps1"
+```
+
+Mac/Linux routine wrapper:
+
+```bash
+bash ./scripts/run_routine.sh
+```
+
+## Dependencies
+
+Declared in `pyproject.toml`:
+
+- `playwright>=1.44.0`
+
+LLM-assisted analysis additionally requires `OPENAI_API_KEY`.
 
 ## Current Status
 
-Workstream 01 is functional as a private demand-listening workflow. Workstream 02 has a first automation-ready Supplier RFQ & Communication Agent with tested scenario coverage and a Chinese report/dashboard. See:
+- Demand Listener is the currently active operational lane.
+- Latest demand artifacts indicate `continue watching`.
+- Current configured observation window is `2026-06-02` through `2026-06-08`.
+- Supplier RFQ code is implemented and test-covered, but the checked-in supplier JSON state is currently empty.
+- The current automated test baseline passes.
 
-- [Project Status](PROJECT_STATUS.md)
-- [Codex Handoff](CODEX_HANDOFF.md)
-- [Workstream 02](workstreams/workstream-02-supplier-rfq-china-sourcing.md)
-- [Supplier Agent](agents/supplier-rfq-communication-agent/README.md)
-- [Demand Listener Agent](agents/demand-listener/README.md)
+See:
 
-## Cross-Device Notes
+- [PROJECT_STATUS.md](PROJECT_STATUS.md)
+- [CODEX_HANDOFF.md](CODEX_HANDOFF.md)
+- [docs/cross-device-sync.md](docs/cross-device-sync.md)
 
-GitHub should be the source of truth for code and documentation. Runtime data should remain local on each device. After cloning on a Mac, recreate `.venv`, install dependencies, and configure any local paths in `config/shed_agent_config.json` before running browser-based collection.
+## Important Notes
+
+- Keep the GitHub repo private.
+- Do not commit `.local/`, browser session state, logs, reports, or caches.
+- Supplier outreach remains human-approved only.
+- Windows helper scripts remain Windows-specific; the Python CLI itself is portable.
