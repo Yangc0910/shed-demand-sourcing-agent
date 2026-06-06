@@ -9,6 +9,11 @@ This is a private dual-agent repository for:
 
 The repo is meant to be the durable continuation layer across Windows and Mac, even if Codex conversation history does not sync cleanly.
 
+GitHub remote:
+
+- `origin`
+- `https://github.com/Yangc0910/shed-demand-sourcing-agent`
+
 ## Where To Start Reading
 
 1. `README.md`
@@ -25,6 +30,7 @@ The repo is meant to be the durable continuation layer across Windows and Mac, e
 - Latest recommendation: `continue watching`
 - Current observation window: `2026-06-02` to `2026-06-08`
 - Supplier RFQ remains implemented and ready, but is not the hottest operational lane right now
+- GitHub migration status: repository prepared locally and ready to continue from GitHub on both Windows and Mac
 
 ## Important Files
 
@@ -42,7 +48,7 @@ The repo is meant to be the durable continuation layer across Windows and Mac, e
 
 ## How To Continue From Here
 
-1. Push this repo to private GitHub.
+1. Clone the private GitHub repo on the next machine.
 2. Clone it on the Mac.
 3. Create a virtual environment and install dependencies.
 4. Restore `OPENAI_API_KEY` if needed.
