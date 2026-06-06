@@ -13,7 +13,7 @@ GitHub remote:
 
 - `origin`
 - `https://github.com/Yangc0910/shed-demand-sourcing-agent`
-- current shell push status: remote configured, push not yet verified from CLI
+- current shell push status: verified and synced to `origin/main`
 
 ## Where To Start Reading
 
@@ -31,7 +31,7 @@ GitHub remote:
 - Latest recommendation: `continue watching`
 - Current observation window: `2026-06-02` to `2026-06-08`
 - Supplier RFQ remains implemented and ready, but is not the hottest operational lane right now
-- GitHub migration status: repository prepared locally; remote configured; CLI push still requires successful GitHub access verification
+- GitHub migration status: repository pushed and verified on `origin/main`
 
 ## Important Files
 
@@ -49,12 +49,11 @@ GitHub remote:
 
 ## How To Continue From Here
 
-1. Verify GitHub CLI/git credential access and complete the first successful push.
-2. Clone the private GitHub repo on the next machine.
-3. Create a virtual environment and install dependencies.
-4. Restore `OPENAI_API_KEY` if needed.
-5. Run tests first.
-6. Continue from the current workstream doc rather than inferring state from `reports/`.
+1. Clone the private GitHub repo on the next machine.
+2. Create a virtual environment and install dependencies.
+3. Restore `OPENAI_API_KEY` if needed.
+4. Run tests first.
+5. Continue from the current workstream doc rather than inferring state from `reports/`.
 
 ## What Not To Change Without Confirmation
 
